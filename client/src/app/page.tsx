@@ -6,6 +6,7 @@ const Home = () => {
   const [socket, setSocket] = useState<any>(undefined)
   const [message, setMessage] = useState("");
   const [id, setId] = useState("");
+  const [messages, setMessages] = useState<any>([]);
 
   const onChangeHandler = (e: any) => {
     setMessage(e.target.value)
@@ -13,7 +14,7 @@ const Home = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    socket.emit('message', message)
+    socket.emit('message-from-client', message)
   };
 
   useEffect(() => {
@@ -22,6 +23,12 @@ const Home = () => {
     socket.on('connect', () => {
       console.log(`User connected with socket id `, socket.id)
       setId(socket?.id || "")
+    })
+
+    socket.on('message-from-redis', (message) => {
+      message = JSON.parse(message)
+      console.log(message.data)
+      setMessages((prevMessages: any) => [...prevMessages, message.data]);
     })
 
     socket.on('disconnect', (reason) => {
@@ -53,6 +60,17 @@ const Home = () => {
       <div className="submit">
         <button type="submit">Send</button>
       </div>
+
+
+      <br></br>
+      <br></br>
+
+
+      {messages.map((val: any, index: any) => {
+        return <div>
+          <p>{val}</p>
+        </div>
+      })}
       <style jsx>{`
                 form {
                     display: flex;
