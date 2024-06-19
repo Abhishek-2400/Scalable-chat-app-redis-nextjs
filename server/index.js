@@ -10,7 +10,7 @@ const startServer = async () => {
     const server = http.createServer();
     const io = new Server(server, {
         cors: {
-            origin: ["http://localhost:3000"],
+            origin: ["https://scalable-chat-app-redis-nextjs.vercel.app"],
             methods: ['GET', 'POST'],
             credentials: true
         }
