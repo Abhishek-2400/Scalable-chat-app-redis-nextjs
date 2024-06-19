@@ -2,6 +2,7 @@ import Redis from "ioredis"
 import dotenv from "dotenv";
 dotenv.config();
 
+
 const pub = new Redis({
     host: process.env.HOST,
     port: parseInt(process.env.REDISPORT),
@@ -25,19 +26,19 @@ class SocketServices {
     eventListeners() {
         this.io.on('connection', (socket) => {
             console.log(`User connected ${socket.id}`)
-            socket.on('message-from-client', async (data) => {
+            socket.on('message-client', async (data) => {
                 console.log(`data received ${data}`)
                 await pub.publish('MESSAGES', JSON.stringify({ data }))
             })
             socket.on('disconnect', () => {
                 console.log(`User disconnected ${socket.id}`)
             })
-
-            sub.on('message', (channel, message) => {
-                if (channel === "MESSAGES") {
-                    this.io.emit('message-from-redis', message)
-                }
-            })
+        })
+        sub.on('message', async (channel, message) => {
+            console.log(channel)
+            if (channel === "MESSAGES") {
+                this.io.emit('message-from-redis', message)
+            }
         })
     }
 }
