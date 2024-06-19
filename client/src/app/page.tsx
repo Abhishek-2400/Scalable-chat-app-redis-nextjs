@@ -18,7 +18,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const socket = io('http://localhost:4000')
+    const socket = io('https://scalable-chat-app-redis-nextjs-server.onrender.com')
     setSocket(socket)
     socket.on('connect', () => {
       console.log(`User connected with socket id `, socket.id)
