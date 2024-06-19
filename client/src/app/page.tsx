@@ -67,7 +67,7 @@ const Home = () => {
 
 
       {messages.map((val: any, index: any) => {
-        return <div key={index}>>
+        return <div key={index}>
           <p>{val}</p>
         </div>
       })}
