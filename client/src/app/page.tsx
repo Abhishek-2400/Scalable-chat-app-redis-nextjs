@@ -14,21 +14,22 @@ const Home = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    socket.emit('message-from-client', message)
+    socket.emit('message-client', message)
   };
 
   useEffect(() => {
-    const socket = io('https://scalable-chat-app-redis-nextjs-server.onrender.com')
+    const socket = io('http://localhost:4000')
     setSocket(socket)
     socket.on('connect', () => {
       console.log(`User connected with socket id `, socket.id)
       setId(socket?.id || "")
     })
 
-    socket.on('message-from-redis', (message) => {
-      message = JSON.parse(message)
-      console.log(message.data)
-      setMessages((prevMessages: any) => [...prevMessages, message.data]);
+    socket.on('message-from-redis', (data) => {
+      let parsedData = JSON.parse(data)
+      parsedData = parsedData.data
+      console.log(parsedData.data)
+      setMessages((prevMessages: any) => [...prevMessages, parsedData]);
     })
 
     socket.on('disconnect', (reason) => {
@@ -67,7 +68,7 @@ const Home = () => {
 
 
       {messages.map((val: any, index: any) => {
-        return <div key={index}>
+        return <div>
           <p>{val}</p>
         </div>
       })}
