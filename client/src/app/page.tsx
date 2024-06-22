@@ -14,7 +14,7 @@ const Home = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    socket.emit('message-client', message)
+    await socket.emit('message-client', message)
     setMessage("");
   };
 
